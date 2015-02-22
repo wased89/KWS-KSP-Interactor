@@ -14,7 +14,7 @@ namespace GUIUtils
     class InFlightGUI : MonoBehaviour
     {
         private Rect MainFlightGUI = new Rect(250,250,300,50);
-        private Rect WeatherDataGUI = new Rect(250,250,450,500);
+        private Rect WeatherDataGUI = new Rect(250,250,350,500);
 
 
         private bool showGUI = true;
@@ -48,7 +48,6 @@ namespace GUIUtils
 
             showWeatherDataGUI = GUILayout.Toggle(showWeatherDataGUI, "Weather Data~");
 
-            GUI.DragWindow();
         }
 
         int i = 1;
@@ -95,6 +94,7 @@ namespace GUIUtils
             //GUILayout.Label("Cell Pos: " + Cell.KWSBODY[FlightGlobals.currentMainBody][CellIDInt].CellPosition);
             
             GUILayout.EndVertical();
+
             GUI.DragWindow();
         }
 
