@@ -21,7 +21,7 @@ namespace KWSKSPButtToucher
         public static  Dictionary<CelestialBody, PlanetSimulator> PlanetMap;
 
         private float second;
-        internal static int WeatherTickRate;
+        internal static int WeatherTickRate = 1;
         internal static bool hasGenerated = false;
 
         void Awake()
@@ -44,13 +44,29 @@ namespace KWSKSPButtToucher
                     pSim = new PlanetSimulator(Settings.gridLevel, Settings.Layers, WeatherFunctions.getSunPosition);
                     
                     PlanetMap.Add(body, pSim);
+                    
                     PlanetMap[body].bufferFlip += BufferFlip;
                     Debug.Log("Map added to: " + body.name);
                 }
             }
+            setInitTemps();
             hasGenerated = true;
         }
-
+        void setInitTemps()
+        {
+            foreach(CelestialBody body in PlanetMap.Keys)
+            {
+                for (int AltLayer = 0; AltLayer < PlanetMap[body].LiveMap.Count; AltLayer++)
+                {
+                    foreach(Cell cell in Cell.AtLevel(Settings.gridLevel))
+                    {
+                        PlanetMap[body].SetInitTempOfCell(FlightGlobals.getExternalTemperature
+                            (PlanetMap[body].LiveMap[AltLayer][cell].Altitude,body), AltLayer, cell);
+                    }
+                    
+                }
+            }
+        }
         void FixedUpdate()
         {
             if(hasGenerated == false)

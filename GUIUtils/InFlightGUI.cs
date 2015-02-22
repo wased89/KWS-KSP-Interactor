@@ -13,8 +13,8 @@ namespace GUIUtils
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     class InFlightGUI : MonoBehaviour
     {
-        private Rect MainFlightGUI = new Rect(250,250,300,50);
-        private Rect WeatherDataGUI = new Rect(250,250,350,500);
+        private Rect MainFlightGUI = new Rect(100,100,300,50);
+        private Rect WeatherDataGUI = new Rect(100,100,350,500);
 
 
         private bool showGUI = true;
@@ -47,7 +47,7 @@ namespace GUIUtils
         {
 
             showWeatherDataGUI = GUILayout.Toggle(showWeatherDataGUI, "Weather Data~");
-
+            GUI.DragWindow();
         }
 
         int i = 1;
