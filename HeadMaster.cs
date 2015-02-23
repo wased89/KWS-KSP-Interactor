@@ -42,7 +42,7 @@ namespace KWSKSPButtToucher
                 {
                     Debug.Log(body.name + " has atmosphere!");
                     pSim = new PlanetSimulator(Settings.gridLevel, Settings.Layers, WeatherFunctions.getSunPosition);
-                    
+                    pSim.SetTemperatureFunction(sunStuff);
                     PlanetMap.Add(body, pSim);
                     
                     PlanetMap[body].bufferFlip += BufferFlip;
@@ -62,6 +62,13 @@ namespace KWSKSPButtToucher
                     {
                         PlanetMap[body].SetInitTempOfCell(FlightGlobals.getExternalTemperature
                             (PlanetMap[body].LiveMap[AltLayer][cell].Altitude,body), AltLayer, cell);
+
+                        PlanetMap[body].SetInitPressureOfCell((float)FlightGlobals.getStaticPressure
+                            (PlanetMap[body].LiveMap[AltLayer][cell].Altitude, body), AltLayer, cell);
+
+                        PlanetMap[body].SetInitDensityOfCell((float)FlightGlobals.getAtmDensity
+                            (PlanetMap[body].LiveMap[AltLayer][cell].Pressure), AltLayer, cell);
+
                     }
                     
                 }
@@ -92,6 +99,12 @@ namespace KWSKSPButtToucher
                 second = 0f;
             }
             
+        }
+
+        float sunStuff(int AltLayer, Cell cell)
+        {
+
+            return WeatherFunctions.getSunlightAngle(FlightGlobals.currentMainBody, AltLayer, cell);
         }
 
         void BufferFlip()
