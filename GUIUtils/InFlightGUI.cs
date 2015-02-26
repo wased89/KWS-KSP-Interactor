@@ -7,6 +7,7 @@ using UnityEngine;
 using GeodesicGrid;
 using Weather;
 using KWSKSPButtToucher;
+using KerbalWeatherSimulator;
 
 namespace GUIUtils
 {
@@ -59,19 +60,19 @@ namespace GUIUtils
         {
             
             CelestialBody body = FlightGlobals.currentMainBody;
-            PlanetSimulator pSim = HeadMaster.PlanetMap[body];
-            Cell cell = WeatherFunctions.getCellAtLocation(body, FlightGlobals.ActiveVessel.GetWorldPos3D());
+            PlanetSimulator pSim = KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body];
+            Cell cell = KSPWeatherFunctions.getCellAtLocation(body, FlightGlobals.ActiveVessel.GetWorldPos3D());
 
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
-            if(GUILayout.Button("Body Up")) {if( i < HeadMaster.PlanetMap.Keys.Count - 1) i++; };
+            if(GUILayout.Button("Body Up")) {if( i < KWSKSPButtToucher.KSPHeadMaster.PlanetMap.Keys.Count - 1) i++; };
             if (GUILayout.Button("Body Down")) { if (i > 0) i--; };
             GUILayout.EndHorizontal();
 
-            CelestialBody testBody = HeadMaster.PlanetMap.ElementAt(i).Key;
+            CelestialBody testBody = KWSKSPButtToucher.KSPHeadMaster.PlanetMap.ElementAt(i).Key;
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Layer Up")) { if (AltLayer < HeadMaster.PlanetMap[body].LiveMap.Count - 1) { AltLayer++; } }
+            if (GUILayout.Button("Layer Up")) { if (AltLayer < KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap.Count - 1) { AltLayer++; } }
             if (GUILayout.Button("Layer Down")) { if (AltLayer > 0) { AltLayer--; } }
             GUILayout.EndHorizontal();
             //Debug.Log("1");
@@ -80,19 +81,19 @@ namespace GUIUtils
             GUILayout.Label("Layer: " + AltLayer);
             GUILayout.Label("Current location: " + FlightGlobals.ActiveVessel.GetWorldPos3D().ToString());
             //GUILayout.Label("Temperature: " + WeatherFunctions.getCellTemperature(FlightGlobals.currentMainBody, WeatherFunctions.getCellAtLocation(FlightGlobals.currentMainBody, FlightGlobals.ActiveVessel.GetWorldPos3D())));
-            GUILayout.Label("Temperature: " + ((WeatherFunctions.getCellTemperature(testBody, AltLayer, cell) - 273.15)).ToString("0.0000"));
-            GUILayout.Label("Pressure: " + HeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Pressure.ToString("0.000000000"));
-            GUILayout.Label("Density: " + HeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Density);
+            GUILayout.Label("Temperature: " + ((KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Temperature - 273.15)).ToString("0.0000"));
+            GUILayout.Label("Pressure: " + KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Pressure.ToString("0.000000000"));
+            GUILayout.Label("Density: " + KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Density);
             //Debug.Log("2");
-            GUILayout.Label("Cell Latitude: " + WeatherFunctions.getCellLatitude(cell));
-            GUILayout.Label("Cell Longitude: " + WeatherFunctions.getCellLongitude(cell));
-            GUILayout.Label("Cell Altitude: " + WeatherFunctions.getCellAltitude(testBody, AltLayer, cell));
-            GUILayout.Label("isOcean?: " + WeatherFunctions.cellContainsOcean(testBody, AltLayer, cell));
-            GUILayout.Label("Albedo: " + WeatherFunctions.getCellAlbedo(testBody, AltLayer, cell));
-            GUILayout.Label("Daytime?: " + WeatherFunctions.IsSunlight(testBody, AltLayer, cell) + " " + WeatherFunctions.getSunlightAngle(testBody, AltLayer, cell));
-            GUILayout.Label("Shortwave Abs: " + HeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].SWAbsorbed);
-            GUILayout.Label("Shortwave Out: " + HeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].SWTransmitted);
-            GUILayout.Label("Longwave In: " + HeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].LWIn);
+            GUILayout.Label("Cell Latitude: " + WeatherFunctions.getLatitude(cell));
+            GUILayout.Label("Cell Longitude: " + WeatherFunctions.getLongitude(cell));
+            GUILayout.Label("Cell Altitude: " + KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Altitude);
+            GUILayout.Label("isOcean?: " + KSPWeatherFunctions.isOcean(testBody, cell));
+            GUILayout.Label("Albedo: " + KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Albedo);
+            GUILayout.Label("Daytime?: " + Heating.isSunlight(KSPHeadMaster.PlanetMap[testBody], AltLayer, cell) + " " + Heating.getSunlightAngle(KSPHeadMaster.PlanetMap[testBody], AltLayer, cell));
+            GUILayout.Label("Shortwave Abs: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].SWAbsorbed);
+            GUILayout.Label("Shortwave Out: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].SWTransmitted);
+            GUILayout.Label("Longwave In: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].LWIn);
             //Debug.Log("3");
             //GUILayout.Label("Cell Pos: " + Cell.KWSBODY[FlightGlobals.currentMainBody][CellIDInt].CellPosition);
             

@@ -8,14 +8,15 @@ using KSP.IO;
 using GeodesicGrid;
 using Weather;
 using GUIUtils;
-using KerbalWeatherSystems;
+
 
 namespace KWSKSPButtToucher
 {
     [KSPAddon(KSPAddon.Startup.MainMenu, true)]
-    public class HeadMaster : MonoBehaviour
+    public class KSPHeadMaster : MonoBehaviour
     {
-        PlanetSimulator pSim;
+        //PlanetSimulator pSim;
+        
         SimulatorDisplay simDisplay;
         
         public static  Dictionary<CelestialBody, PlanetSimulator> PlanetMap;
@@ -41,8 +42,9 @@ namespace KWSKSPButtToucher
                 if(body.atmosphere)
                 {
                     Debug.Log(body.name + " has atmosphere!");
-                    pSim = new PlanetSimulator(Settings.gridLevel, Settings.Layers, WeatherFunctions.getSunPosition);
-                    pSim.SetSunAngleFunction(sunAngleStuff);
+                    KSPWeatherCallbacks kspwcb = new KSPWeatherCallbacks(body);
+                    PlanetSimulator pSim = new PlanetSimulator(KWSSettings.gridLevel, KWSSettings.Layers,  kspwcb.SunDirection, kspwcb.SunlightAngle);
+                    
                     PlanetMap.Add(body, pSim);
                     
                     PlanetMap[body].bufferFlip += BufferFlip;
@@ -60,7 +62,7 @@ namespace KWSKSPButtToucher
 
                 for (int AltLayer = 0; AltLayer < PlanetMap[body].LiveMap.Count; AltLayer++)
                 {
-                    foreach(Cell cell in Cell.AtLevel(Settings.gridLevel))
+                    foreach(Cell cell in Cell.AtLevel(KWSSettings.gridLevel))
                     {
                         PlanetMap[body].SetInitTempOfCell(FlightGlobals.getExternalTemperature
                             (PlanetMap[body].LiveMap[AltLayer][cell].Altitude,body), AltLayer, cell);
@@ -92,8 +94,8 @@ namespace KWSKSPButtToucher
                     //Debug.Log(body.name + " has: " + PlanetMap[body].Count + " layers.");
                     if (hasGenerated == true)
                     {
-                        pSim = PlanetMap[FlightGlobals.currentMainBody];
-                        pSim.UpdateNCells(Settings.CellsPerUpdate);
+                        PlanetSimulator pSim = PlanetMap[FlightGlobals.currentMainBody];
+                        pSim.UpdateNCells(KWSSettings.CellsPerUpdate);
 
                     }
 
@@ -104,17 +106,10 @@ namespace KWSKSPButtToucher
             
         }
 
-        float sunAngleStuff(int AltLayer, Cell cell)
-        {
-
-            return WeatherFunctions.getSunlightAngle(AltLayer, cell);
-        }
-        
-
         void BufferFlip()
         {
             
-            //simDisplay.OnBufferChange();
+            
         }
         
     }

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading;
 using UnityEngine;
 
+
 namespace KWSKSPButtToucher
 {
     [KSPAddon(KSPAddon.Startup.MainMenu, false)]
-    class Settings : MonoBehaviour
+    public class KWSSettings : MonoBehaviour
     {
         internal static int gridLevel = 5;
         internal static int Layers = 6;
@@ -33,7 +34,7 @@ namespace KWSKSPButtToucher
         {
             GUILayout.BeginVertical();
             GUILayout.Label("Weather Grid Level: " + dummyGridDef);
-            GUILayout.Label("Weather Tick Rate: " + (HeadMaster.WeatherTickRate * 0.02).ToString("0.00") + " seconds");
+            GUILayout.Label("Weather Tick Rate: " + (KSPHeadMaster.WeatherTickRate * 0.02).ToString("0.00") + " seconds");
             GUILayout.Label("Altitude Increment: " + cellDefinitionAlt + " metres");
             GUILayout.Label("Cells per Tick: " + CellsPerUpdate);
             GUILayout.BeginHorizontal();
@@ -41,8 +42,8 @@ namespace KWSKSPButtToucher
             if (GUILayout.Button("Grid Lvl Down")) { if (dummyGridDef > 5) { dummyGridDef--; } }
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Tick Up")) { HeadMaster.WeatherTickRate += 1; }
-            if (GUILayout.Button("Tick Down")) { if (HeadMaster.WeatherTickRate >= 1) { HeadMaster.WeatherTickRate -= 1; } }
+            if (GUILayout.Button("Tick Up")) { KSPHeadMaster.WeatherTickRate += 1; }
+            if (GUILayout.Button("Tick Down")) { if (KSPHeadMaster.WeatherTickRate >= 1) { KSPHeadMaster.WeatherTickRate -= 1; } }
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Cells Up")) { CellsPerUpdate += 1; }
@@ -51,7 +52,7 @@ namespace KWSKSPButtToucher
             if (GUILayout.Button("Generate New Grid!")) 
             { 
                 gridLevel = dummyGridDef; 
-                HeadMaster.hasGenerated = false; 
+                KSPHeadMaster.hasGenerated = false; 
 
             }
             GUILayout.EndVertical();
