@@ -42,20 +42,22 @@ namespace KWSKSPButtToucher
                 {
                     Debug.Log(body.name + " has atmosphere!");
                     pSim = new PlanetSimulator(Settings.gridLevel, Settings.Layers, WeatherFunctions.getSunPosition);
-                    pSim.SetTemperatureFunction(sunStuff);
+                    pSim.SetSunAngleFunction(sunAngleStuff);
                     PlanetMap.Add(body, pSim);
                     
                     PlanetMap[body].bufferFlip += BufferFlip;
                     Debug.Log("Map added to: " + body.name);
                 }
             }
-            setInitTemps();
+            setInitVars();
             hasGenerated = true;
         }
-        void setInitTemps()
+        void setInitVars()
         {
             foreach(CelestialBody body in PlanetMap.Keys)
             {
+                PlanetMap[body].SetBodyKSun((float)Weather.Heating.calculateBodyKSun(body.orbit.radius));
+
                 for (int AltLayer = 0; AltLayer < PlanetMap[body].LiveMap.Count; AltLayer++)
                 {
                     foreach(Cell cell in Cell.AtLevel(Settings.gridLevel))
@@ -69,6 +71,7 @@ namespace KWSKSPButtToucher
                         PlanetMap[body].SetInitDensityOfCell((float)FlightGlobals.getAtmDensity
                             (PlanetMap[body].LiveMap[AltLayer][cell].Pressure), AltLayer, cell);
 
+                        
                     }
                     
                 }
@@ -101,16 +104,17 @@ namespace KWSKSPButtToucher
             
         }
 
-        float sunStuff(int AltLayer, Cell cell)
+        float sunAngleStuff(int AltLayer, Cell cell)
         {
 
-            return WeatherFunctions.getSunlightAngle(FlightGlobals.currentMainBody, AltLayer, cell);
+            return WeatherFunctions.getSunlightAngle(AltLayer, cell);
         }
+        
 
         void BufferFlip()
         {
             
-            simDisplay.OnBufferChange();
+            //simDisplay.OnBufferChange();
         }
         
     }

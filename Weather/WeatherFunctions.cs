@@ -35,14 +35,12 @@ namespace Weather
             return FlightGlobals.Bodies[0].position;
         }
 
-        public static float getSunlightAngle(CelestialBody body, int AltLayer, Cell cell)
+        public static float getSunlightAngle(int AltLayer, Cell cell)
         {
             float degrees;
-
-
-            Vector3 sunPos = FlightGlobals.Bodies[0].position;
-            Vector3 cellPos = body.transform.TransformDirection(cell.Position);
-            degrees = Vector3.Angle(cellPos, sunPos);
+            Vector3 sunPos = FlightGlobals.Bodies[0].transform.TransformDirection(cell.Position);
+            
+            degrees = Vector3.Angle(cell.Position, sunPos);
 
             return degrees;
         }
@@ -92,7 +90,7 @@ namespace Weather
         internal static float calculateAtmosphericPathLength(CelestialBody body, int AltLayer, Cell cell)
         {
 
-            float zenithAngle = getSunlightAngle(body, AltLayer, cell) * Mathf.Deg2Rad;
+            float zenithAngle = getSunlightAngle(AltLayer, cell) * Mathf.Deg2Rad;
             float ymax = HeadMaster.PlanetMap[body].LiveMap[HeadMaster.PlanetMap[body].LiveMap.Count - 1][cell].Altitude + KWSKSPButtToucher.Settings.cellDefinitionAlt;
             float stuff = (float)Math.Sqrt(
                 (((body.Radius + HeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].Altitude) / ymax) * ((body.Radius + HeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].Altitude) / ymax)) *
@@ -423,7 +421,7 @@ namespace Weather
         public static bool IsSunlight(CelestialBody body, int AltLayer, Cell cell)
         {
 
-            if (getSunlightAngle(body, AltLayer, cell) <= 91)
+            if (getSunlightAngle(AltLayer, cell) <= 91)
             {
                 return true;
             }
