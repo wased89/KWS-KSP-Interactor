@@ -8,6 +8,7 @@ using KSP.IO;
 using GeodesicGrid;
 using Weather;
 using GUIUtils;
+using KerbalWeatherSimulator;
 
 
 namespace KWSKSPButtToucher
@@ -17,7 +18,6 @@ namespace KWSKSPButtToucher
     {
         //PlanetSimulator pSim;
         
-        SimulatorDisplay simDisplay;
         
         public static  Dictionary<CelestialBody, PlanetSimulator> PlanetMap;
 
@@ -34,6 +34,7 @@ namespace KWSKSPButtToucher
 
         void GenerateNewGrids()
         {
+            hasGenerated = true;
             PlanetMap = new Dictionary<CelestialBody, PlanetSimulator>();
             int i = 0;
             foreach(CelestialBody body in FlightGlobals.Bodies)
@@ -41,24 +42,25 @@ namespace KWSKSPButtToucher
                 i++;
                 if(body.atmosphere)
                 {
-                    Debug.Log(body.name + " has atmosphere!");
+                    //Debug.Log(body.name + " has atmosphere!");
                     KSPWeatherCallbacks kspwcb = new KSPWeatherCallbacks(body);
-                    PlanetSimulator pSim = new PlanetSimulator(KWSSettings.gridLevel, KWSSettings.Layers,  kspwcb.SunDirection, kspwcb.SunlightAngle);
-                    
+                    //Debug.Log("1");
+                    PlanetSimulator pSim = new PlanetSimulator(KWSSettings.gridLevel, KWSSettings.Layers-1,  kspwcb.SunDirection, kspwcb.SunlightAngle);
+                    //Debug.Log("2");
                     PlanetMap.Add(body, pSim);
-                    
-                    PlanetMap[body].bufferFlip += BufferFlip;
+                    //Debug.Log("3");
+                    pSim.bufferFlip += BufferFlip;
                     Debug.Log("Map added to: " + body.name);
                 }
             }
             setInitVars();
-            hasGenerated = true;
+            
         }
         void setInitVars()
         {
             foreach(CelestialBody body in PlanetMap.Keys)
             {
-                PlanetMap[body].SetBodyKSun((float)Weather.Heating.calculateBodyKSun(body.orbit.radius));
+                PlanetMap[body].SetBodyKSun((float)Heating.calculateBodyKSun(body.orbit.radius));
 
                 for (int AltLayer = 0; AltLayer < PlanetMap[body].LiveMap.Count; AltLayer++)
                 {

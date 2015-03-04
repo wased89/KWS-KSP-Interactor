@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using GeodesicGrid;
-using KWSKSPButtToucher;
 using KerbalWeatherSimulator;
+using KWSKSPButtToucher;
 
 namespace Weather
 {
@@ -21,6 +21,15 @@ namespace Weather
         public static Vector3 getSunPosition()
         {
             return FlightGlobals.Bodies[0].position;
+        }
+
+        public static Vector3 getCoriolisAcc(CelestialBody body, Cell cell)
+        {
+            //ac = -2(angularVelocity) x velocity
+            Vector3 acc = -2 * Vector3.Cross(Vector3.Cross(body.angularVelocity,
+                new Vector3(0, Mathf.Cos(WeatherFunctions.getLatitude(cell)), Mathf.Sin(WeatherFunctions.getLatitude(cell)))),
+                KSPHeadMaster.PlanetMap[body].LiveMap[0][cell].WindDirection);
+            return acc;
         }
 
         public static bool isOcean(CelestialBody body, Cell cell)

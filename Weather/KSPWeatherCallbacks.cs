@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using GeodesicGrid;
-using KerbalWeatherSystems;
+
 
 namespace Weather
 {
@@ -19,12 +19,13 @@ namespace Weather
 
         public Vector3 SunDirection()
         {
-            return Vector3.zero;
+            
+            return body.rotation * (FlightGlobals.Bodies[0].position - body.position).normalized;
         }
 
         public float SunlightAngle(Vector3 sunDir, int AltLayer, Cell cell)
         {
-            return 0f;
+            return Vector3.Angle(cell.Position, sunDir);
         }
 
     }
