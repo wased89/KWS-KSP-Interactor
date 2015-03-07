@@ -72,7 +72,7 @@ namespace GUIUtils
             CelestialBody testBody = KWSKSPButtToucher.KSPHeadMaster.PlanetMap.ElementAt(i).Key;
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Layer Up")) { if (AltLayer < KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap.Count - 1) { AltLayer++; } }
+            if (GUILayout.Button("Layer Up")) { if (AltLayer < KWSKSPButtToucher.KSPHeadMaster.PlanetMap[testBody].LiveMap.Count - 1) { AltLayer++; } }
             if (GUILayout.Button("Layer Down")) { if (AltLayer > 0) { AltLayer--; } }
             GUILayout.EndHorizontal();
             //Debug.Log("1");
@@ -91,9 +91,9 @@ namespace GUIUtils
             GUILayout.Label("isOcean?: " + KSPWeatherFunctions.isOcean(testBody, cell));
             GUILayout.Label("Albedo: " + KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].Albedo);
             GUILayout.Label("Daytime?: " + Heating.isSunlight(KSPHeadMaster.PlanetMap[testBody], AltLayer, cell) + " " + Heating.getSunlightAngle(KSPHeadMaster.PlanetMap[testBody], AltLayer, cell));
-            GUILayout.Label("Shortwave Abs: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].SWAbsorbed);
-            GUILayout.Label("Shortwave Out: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].SWTransmitted);
-            GUILayout.Label("Longwave In: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[body].LiveMap[AltLayer][cell].LWIn);
+            GUILayout.Label("Shortwave Abs: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].SWAbsorbed);
+            GUILayout.Label("Shortwave Out: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].SWTransmitted);
+            GUILayout.Label("Longwave In: " + KWSKSPButtToucher.KSPHeadMaster.PlanetMap[testBody].LiveMap[AltLayer][cell].LWIn);
             //Debug.Log("3");
             //GUILayout.Label("Cell Pos: " + Cell.KWSBODY[FlightGlobals.currentMainBody][CellIDInt].CellPosition);
             
